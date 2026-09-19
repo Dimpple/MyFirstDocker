@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baahubali - Movie Ticket Booking</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #111;
+      color: white;
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(135deg, #8b0000, #e67e22);
+      text-align: center;
+      padding: 30px 20px;
+    }
+
+    header h1 {
+      font-size: 42px;
+      margin-bottom: 8px;
+    }
+
+    header p {
+      font-size: 18px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 25px;
+      background: #222;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    }
+
+    .movie-info {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .movie-info h2 {
+      color: #f39c12;
+      margin-bottom: 10px;
+    }
+
+    label {
+      display: block;
+      margin: 15px 0 7px;
+      font-weight: bold;
+    }
+
+    select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-size: 16px;
+    }
+
+    .screen {
+      background: #ddd;
+      color: #111;
+      text-align: center;
+      padding: 10px;
+      margin: 30px 0 20px;
+      border-radius: 50% 50% 0 0;
+    }
+
+    .seats {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 10px;
+      max-width: 500px;
+      margin: auto;
+    }
+
+    .seat {
+      background: #444;
+      padding: 10px 5px;
+      text-align: center;
+      border-radius: 6px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .seat:hover {
+      background: #666;
+    }
+
+    .seat.selected {
+      background: #27ae60;
+    }
+
+    .seat.booked {
+      background: #c0392b;
+      cursor: not-allowed;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+
+    .legend span {
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+
+    .available {
+      background: #444;
+    }
+
+    .selected-legend {
+      background: #27ae60;
+    }
+
+    .booked-legend {
+      background: #c0392b;
+    }
+
+    .summary {
+      margin-top: 30px;
+      background: #333;
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .summary p {
+      margin: 8px 0;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      background: #e67e22;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #d35400;
+    }
+
+    #message {
+      margin-top: 15px;
+      text-align: center;
+      color: #2ecc71;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🎬 BAAHUBALI</h1>
+  <p>Movie Ticket Booking</p>
+</header>
+
+<div class="container">
+
+  <div class="movie-info">
+    <h2>Baahubali</h2>
+    <p>Experience the epic movie on the big screen!</p>
+  </div>
+
+  <label for="date">Select Date</label>
+  <select id="date">
+    <option>Today</option>
+    <option>Tomorrow</option>
+    <option>25 September 2026</option>
+    <option>26 September 2026</option>
+  </select>
+
+  <label for="show">Select Show Time</label>
+  <select id="show">
+    <option value="180">10:00 AM</option>
+    <option value="180">1:30 PM</option>
+    <option value="220">6:00 PM</option>
+    <option value="220">9:30 PM</option>
+  </select>
+
+  <div class="screen">SCREEN</div>
+
+  <div class="legend">
+    <span class="available">Available</span>
+    <span class="selected-legend">Selected</span>
+    <span class="booked-legend">Booked</span>
+  </div>
+
+  <div class="seats" id="seats"></div>
+
+  <div class="summary">
+    <p>Selected Seats: <strong id="selectedSeats">None</strong></p>
+    <p>Ticket Price: ₹<strong id="price">0</strong></p>
+    <p>Total: ₹<strong id="total">0</strong></p>
+
+    <button onclick="bookTickets()">Book Tickets</button>
+
+    <div id="message"></div>
+  </div>
+
+</div>
+
+<script>
+  const seatsContainer = document.getElementById("seats");
+  const selectedSeatsText = document.getElementById("selectedSeats");
+  const priceText = document.getElementById("price");
+  const totalText = document.getElementById("total");
+  const showSelect = document.getElementById("show");
+
+  // Example booked seats
+  const bookedSeats = [5, 6, 17, 18, 35];
+
+  // Create 40 seats
+  for (let i = 1; i <= 40; i++) {
+    const seat = document.createElement("div");
+
+    seat.classList.add("seat");
+    seat.textContent = i;
+
+    if (bookedSeats.includes(i)) {
+      seat.classList.add("booked");
+    } else {
+      seat.addEventListener("click", () => {
+        seat.classList.toggle("selected");
+        updateSummary();
+      });
+    }
+
+    seatsContainer.appendChild(seat);
+  }
+
+  function updateSummary() {
+    const selected = document.querySelectorAll(".seat.selected");
+    const seatNumbers = Array.from(selected).map(seat => seat.textContent);
+
+    const price = Number(showSelect.value);
+    const total = selected.length * price;
+
+    selectedSeatsText.textContent =
+      seatNumbers.length > 0 ? seatNumbers.join(", ") : "None";
+
+    priceText.textContent = selected.length > 0 ? price : 0;
+    totalText.textContent = total;
+  }
+
+  showSelect.addEventListener("change", updateSummary);
+
+  function bookTickets() {
+    const selected = document.querySelectorAll(".seat.selected");
+
+    if (selected.length === 0) {
+      alert("Please select at least one seat.");
+      return;
+    }
+
+    const seatNumbers = Array.from(selected)
+      .map(seat => seat.textContent)
+      .join(", ");
+
+    const total = selected.length * Number(showSelect.value);
+
+    document.getElementById("message").textContent =
+      `Booking confirmed! Seats: ${seatNumbers} | Total: ₹${total}`;
+  }
+</script>
+
+</body>
+</html>
