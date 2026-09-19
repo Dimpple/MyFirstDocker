@@ -1,287 +1,602 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Baahubali - Movie Ticket Booking</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>St. Aurelius Medical College</title>
+<style>
+  /* ---------- Base ---------- */
+  :root {
+    --primary: #0b6e4f;
+    --primary-dark: #08543c;
+    --accent: #e63946;
+    --bg: #f7faf9;
+    --text: #1d2b28;
+    --muted: #5c6b68;
+    --card: #ffffff;
+    --border: #e0e8e5;
+  }
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-    }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      background: #111;
-      color: white;
-      min-height: 100vh;
-    }
+  body {
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.6;
+  }
 
-    header {
-      background: linear-gradient(135deg, #8b0000, #e67e22);
-      text-align: center;
-      padding: 30px 20px;
-    }
+  a { color: inherit; text-decoration: none; }
 
-    header h1 {
-      font-size: 42px;
-      margin-bottom: 8px;
-    }
+  .container {
+    width: min(1100px, 92%);
+    margin: 0 auto;
+  }
 
-    header p {
-      font-size: 18px;
-    }
+  /* ---------- Header ---------- */
+  header {
+    background: var(--card);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
 
-    .container {
-      max-width: 800px;
-      margin: 30px auto;
-      padding: 25px;
-      background: #222;
-      border-radius: 15px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-    }
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+  }
 
-    .movie-info {
-      text-align: center;
-      margin-bottom: 25px;
-    }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--primary);
+  }
 
-    .movie-info h2 {
-      color: #f39c12;
-      margin-bottom: 10px;
-    }
+  .logo .cross {
+    width: 30px;
+    height: 30px;
+    background: var(--primary);
+    border-radius: 6px;
+    position: relative;
+  }
+  .logo .cross::before,
+  .logo .cross::after {
+    content: "";
+    position: absolute;
+    background: #fff;
+    border-radius: 2px;
+  }
+  .logo .cross::before {
+    width: 6px; height: 18px;
+    top: 6px; left: 12px;
+  }
+  .logo .cross::after {
+    width: 18px; height: 6px;
+    top: 12px; left: 6px;
+  }
 
-    label {
-      display: block;
-      margin: 15px 0 7px;
-      font-weight: bold;
-    }
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+    font-weight: 500;
+  }
 
-    select {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      font-size: 16px;
-    }
+  nav a:hover { color: var(--primary); }
 
-    .screen {
-      background: #ddd;
-      color: #111;
-      text-align: center;
-      padding: 10px;
-      margin: 30px 0 20px;
-      border-radius: 50% 50% 0 0;
-    }
+  .menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: var(--primary);
+  }
 
-    .seats {
-      display: grid;
-      grid-template-columns: repeat(8, 1fr);
-      gap: 10px;
-      max-width: 500px;
-      margin: auto;
-    }
+  /* ---------- Hero ---------- */
+  .hero {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #fff;
+    padding: 5rem 0;
+    text-align: center;
+  }
 
-    .seat {
-      background: #444;
-      padding: 10px 5px;
-      text-align: center;
-      border-radius: 6px;
-      cursor: pointer;
-      user-select: none;
-    }
+  .hero h1 {
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    margin-bottom: 1rem;
+  }
 
-    .seat:hover {
-      background: #666;
-    }
+  .hero p {
+    max-width: 620px;
+    margin: 0 auto 2rem;
+    opacity: 0.92;
+  }
 
-    .seat.selected {
-      background: #27ae60;
-    }
+  .btn {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    padding: 0.75rem 1.75rem;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  .btn:hover { background: #c92d3a; transform: translateY(-2px); }
 
-    .seat.booked {
-      background: #c0392b;
-      cursor: not-allowed;
-    }
+  .btn-outline {
+    background: transparent;
+    border: 2px solid #fff;
+    margin-left: 0.75rem;
+  }
+  .btn-outline:hover { background: rgba(255,255,255,0.15); }
 
-    .legend {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin: 20px 0;
-      font-size: 14px;
-    }
+  /* ---------- Sections ---------- */
+  section { padding: 4rem 0; }
 
-    .legend span {
-      padding: 5px 10px;
-      border-radius: 5px;
-    }
+  .section-title {
+    text-align: center;
+    font-size: 1.9rem;
+    color: var(--primary-dark);
+    margin-bottom: 0.5rem;
+  }
 
-    .available {
-      background: #444;
-    }
+  .section-sub {
+    text-align: center;
+    color: var(--muted);
+    margin-bottom: 2.5rem;
+  }
 
-    .selected-legend {
-      background: #27ae60;
-    }
+  /* ---------- Stats ---------- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1.25rem;
+  }
 
-    .booked-legend {
-      background: #c0392b;
-    }
+  .stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+  }
 
-    .summary {
-      margin-top: 30px;
-      background: #333;
-      padding: 20px;
-      border-radius: 10px;
-    }
+  .stat .num {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
 
-    .summary p {
-      margin: 8px 0;
-    }
+  .stat .label {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
 
-    button {
-      width: 100%;
-      margin-top: 20px;
-      padding: 14px;
-      border: none;
-      border-radius: 8px;
-      background: #e67e22;
-      color: white;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+  /* ---------- Cards ---------- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
 
-    button:hover {
-      background: #d35400;
-    }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
 
-    #message {
-      margin-top: 15px;
-      text-align: center;
-      color: #2ecc71;
-      font-weight: bold;
+  .card:hover {
+    box-shadow: 0 10px 24px rgba(11, 110, 79, 0.12);
+    transform: translateY(-4px);
+  }
+
+  .card h3 {
+    color: var(--primary-dark);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+  }
+
+  .card .tag {
+    display: inline-block;
+    background: #e6f4ef;
+    color: var(--primary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    margin-bottom: 0.75rem;
+  }
+
+  .card p { color: var(--muted); font-size: 0.95rem; }
+
+  .faculty .avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* ---------- Admissions ---------- */
+  .admissions {
+    background: #eef7f3;
+    border-radius: 16px;
+    padding: 2.5rem;
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+
+  .step {
+    background: #fff;
+    border-radius: 10px;
+    padding: 1.25rem;
+    border-left: 4px solid var(--primary);
+  }
+
+  .step .n {
+    font-weight: 700;
+    color: var(--primary);
+    font-size: 0.85rem;
+  }
+
+  /* ---------- Contact ---------- */
+  form {
+    max-width: 560px;
+    margin: 0 auto;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .field { display: grid; gap: 0.35rem; }
+
+  label { font-size: 0.9rem; font-weight: 600; }
+
+  input, textarea, select {
+    padding: 0.7rem 0.85rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font: inherit;
+    background: #fff;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    outline: 2px solid var(--primary);
+    border-color: transparent;
+  }
+
+  .form-msg {
+    color: var(--primary);
+    font-weight: 600;
+    text-align: center;
+    min-height: 1.4rem;
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    background: var(--primary-dark);
+    color: #d8ebe3;
+    padding: 2.5rem 0 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  footer h4 { color: #fff; margin-bottom: 0.5rem; }
+  footer p, footer li { font-size: 0.9rem; opacity: 0.9; }
+  footer ul { list-style: none; display: grid; gap: 0.3rem; }
+
+  .copyright {
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.15);
+    padding-top: 1rem;
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 720px) {
+    .menu-toggle { display: block; }
+    nav ul {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #fff;
+      padding: 1rem 5%;
+      border-bottom: 1px solid var(--border);
+      gap: 0.75rem;
     }
-  </style>
+    nav ul.open { display: flex; }
+    .btn-outline { margin-left: 0; margin-top: 0.5rem; }
+  }
+</style>
 </head>
-
 <body>
 
+<!-- ============ HEADER ============ -->
 <header>
-  <h1>🎬 BAAHUBALI</h1>
-  <p>Movie Ticket Booking</p>
+  <div class="container nav">
+    <div class="logo">
+      <span class="cross" aria-hidden="true"></span>
+      St. Aurelius Medical College
+    </div>
+    <button class="menu-toggle" aria-label="Toggle menu" onclick="toggleMenu()">☰</button>
+    <nav>
+      <ul id="navList">
+        <li><a href="#about">About</a></li>
+        <li><a href="#programs">Programs</a></li>
+        <li><a href="#departments">Departments</a></li>
+        <li><a href="#faculty">Faculty</a></li>
+        <li><a href="#admissions">Admissions</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
 </header>
 
-<div class="container">
-
-  <div class="movie-info">
-    <h2>Baahubali</h2>
-    <p>Experience the epic movie on the big screen!</p>
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="container">
+    <h1>Shaping Tomorrow's Healers</h1>
+    <p>
+      A premier institution dedicated to excellence in medical education,
+      research, and compassionate patient care since 1962.
+    </p>
+    <a href="#admissions" class="btn">Apply Now</a>
+    <a href="#programs" class="btn btn-outline">Explore Programs</a>
   </div>
+</section>
 
-  <label for="date">Select Date</label>
-  <select id="date">
-    <option>Today</option>
-    <option>Tomorrow</option>
-    <option>25 September 2026</option>
-    <option>26 September 2026</option>
-  </select>
-
-  <label for="show">Select Show Time</label>
-  <select id="show">
-    <option value="180">10:00 AM</option>
-    <option value="180">1:30 PM</option>
-    <option value="220">6:00 PM</option>
-    <option value="220">9:30 PM</option>
-  </select>
-
-  <div class="screen">SCREEN</div>
-
-  <div class="legend">
-    <span class="available">Available</span>
-    <span class="selected-legend">Selected</span>
-    <span class="booked-legend">Booked</span>
+<!-- ============ ABOUT / STATS ============ -->
+<section id="about">
+  <div class="container">
+    <h2 class="section-title">About the College</h2>
+    <p class="section-sub">
+      Recognized by the National Medical Council, affiliated with Aurelius University Hospital.
+    </p>
+    <div class="stats">
+      <div class="stat"><div class="num">60+</div><div class="label">Years of Excellence</div></div>
+      <div class="stat"><div class="num">5,200</div><div class="label">Alumni Doctors</div></div>
+      <div class="stat"><div class="num">18</div><div class="label">Clinical Departments</div></div>
+      <div class="stat"><div class="num">96%</div><div class="label">Residency Placement</div></div>
+    </div>
   </div>
+</section>
 
-  <div class="seats" id="seats"></div>
-
-  <div class="summary">
-    <p>Selected Seats: <strong id="selectedSeats">None</strong></p>
-    <p>Ticket Price: ₹<strong id="price">0</strong></p>
-    <p>Total: ₹<strong id="total">0</strong></p>
-
-    <button onclick="bookTickets()">Book Tickets</button>
-
-    <div id="message"></div>
+<!-- ============ PROGRAMS ============ -->
+<section id="programs" style="background:#fff;">
+  <div class="container">
+    <h2 class="section-title">Academic Programs</h2>
+    <p class="section-sub">Undergraduate, postgraduate, and doctoral pathways in medicine.</p>
+    <div class="grid">
+      <div class="card">
+        <span class="tag">Undergraduate</span>
+        <h3>MBBS</h3>
+        <p>5.5-year program combining preclinical sciences, clinical rotations, and a mandatory internship.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Postgraduate</span>
+        <h3>MD / MS</h3>
+        <p>Three-year specialized training across 14 clinical and paraclinical disciplines.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Super Specialty</span>
+        <h3>DM / MCh</h3>
+        <p>Advanced training in cardiology, neurology, oncology, and pediatric surgery.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Allied Health</span>
+        <h3>B.Sc. Nursing &amp; Paramedical</h3>
+        <p>Four-year degrees in nursing, radiology, physiotherapy, and medical laboratory science.</p>
+      </div>
+    </div>
   </div>
+</section>
 
-</div>
+<!-- ============ DEPARTMENTS ============ -->
+<section id="departments">
+  <div class="container">
+    <h2 class="section-title">Clinical Departments</h2>
+    <p class="section-sub">Hands-on training across a full spectrum of medical specialties.</p>
+    <div class="grid">
+      <div class="card"><h3>Anatomy</h3><p>Cadaveric dissection labs and imaging-based structural study.</p></div>
+      <div class="card"><h3>Physiology</h3><p>Human function labs with simulation and diagnostic equipment.</p></div>
+      <div class="card"><h3>Pathology</h3><p>Histopathology, hematology, and clinical biochemistry units.</p></div>
+      <div class="card"><h3>Cardiology</h3><p>Interventional cath lab and non-invasive cardiac diagnostics.</p></div>
+      <div class="card"><h3>Neurology</h3><p>EEG, EMG, and stroke care with a dedicated neuro-ICU.</p></div>
+      <div class="card"><h3>Pediatrics</h3><p>Neonatal intensive care and child development clinics.</p></div>
+    </div>
+  </div>
+</section>
 
+<!-- ============ FACULTY ============ -->
+<section id="faculty" style="background:#fff;">
+  <div class="container">
+    <h2 class="section-title">Meet Our Faculty</h2>
+    <p class="section-sub">Clinicians and researchers committed to mentoring the next generation.</p>
+    <div class="grid faculty">
+      <div class="card">
+        <div class="avatar">AR</div>
+        <h3>Dr. Anita Rao, MD</h3>
+        <p>Professor &amp; Head of Cardiology. 20+ years in interventional cardiology.</p>
+      </div>
+      <div class="card">
+        <div class="avatar">SK</div>
+        <h3>Dr. Samuel Kim, PhD</h3>
+        <p>Professor of Neuroscience. Leads the Stroke Recovery Research Lab.</p>
+      </div>
+      <div class="card">
+        <div class="avatar">MP</div>
+        <h3>Dr. Meera Patel, MS</h3>
+        <p>Professor of Pediatric Surgery. Pioneer in minimally invasive techniques.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ADMISSIONS ============ -->
+<section id="admissions">
+  <div class="container">
+    <div class="admissions">
+      <h2 class="section-title" style="margin-bottom:0.5rem;">Admissions 2026</h2>
+      <p class="section-sub" style="margin-bottom:0;">A transparent, merit-based process for every applicant.</p>
+      <div class="steps">
+        <div class="step"><div class="n">STEP 1</div><strong>Submit Application</strong><p>Complete the online form with academic transcripts.</p></div>
+        <div class="step"><div class="n">STEP 2</div><strong>Entrance Exam</strong><p>Sit for the national medical entrance test (NEET equivalent).</p></div>
+        <div class="step"><div class="n">STEP 3</div><strong>Interview</strong><p>Shortlisted candidates attend a panel interview and counseling session.</p></div>
+        <div class="step"><div class="n">STEP 4</div><strong>Enrollment</strong><p>Receive your offer, complete fee payment, and join orientation.</p></div>
+      </div>
+      <div style="text-align:center; margin-top:2rem;">
+        <a href="#contact" class="btn">Request Information</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact" style="background:#fff;">
+  <div class="container">
+    <h2 class="section-title">Get in Touch</h2>
+    <p class="section-sub">Questions about admissions, programs, or campus visits? We'll respond within 2 business days.</p>
+
+    <form id="contactForm" novalidate>
+      <div class="field">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" name="name" required placeholder="Jane Doe" />
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required placeholder="jane@example.com" />
+      </div>
+      <div class="field">
+        <label for="topic">I'm interested in</label>
+        <select id="topic" name="topic">
+          <option>MBBS Admission</option>
+          <option>Postgraduate (MD/MS)</option>
+          <option>Allied Health Programs</option>
+          <option>Campus Visit</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="4" required placeholder="Tell us how we can help..."></textarea>
+      </div>
+      <button type="submit" class="btn">Send Message</button>
+      <p class="form-msg" id="formMsg" role="status" aria-live="polite"></p>
+    </form>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <h4>St. Aurelius Medical College</h4>
+        <p>12 Hippocrates Avenue<br />Aurelius City, 560001</p>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#programs">Programs</a></li>
+          <li><a href="#admissions">Admissions</a></li>
+          <li><a href="#faculty">Faculty</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li>Phone: +1 (555) 014-2200</li>
+          <li>Email: admissions@staurelius.edu</li>
+        </ul>
+      </div>
+    </div>
+    <div class="copyright">
+      © 2026 St. Aurelius Medical College. All rights reserved. (Demo site — fictional institution.)
+    </div>
+  </div>
+</footer>
+
+<!-- ============ SCRIPT ============ -->
 <script>
-  const seatsContainer = document.getElementById("seats");
-  const selectedSeatsText = document.getElementById("selectedSeats");
-  const priceText = document.getElementById("price");
-  const totalText = document.getElementById("total");
-  const showSelect = document.getElementById("show");
-
-  // Example booked seats
-  const bookedSeats = [5, 6, 17, 18, 35];
-
-  // Create 40 seats
-  for (let i = 1; i <= 40; i++) {
-    const seat = document.createElement("div");
-
-    seat.classList.add("seat");
-    seat.textContent = i;
-
-    if (bookedSeats.includes(i)) {
-      seat.classList.add("booked");
-    } else {
-      seat.addEventListener("click", () => {
-        seat.classList.toggle("selected");
-        updateSummary();
-      });
-    }
-
-    seatsContainer.appendChild(seat);
+  // Mobile menu toggle
+  function toggleMenu() {
+    document.getElementById("navList").classList.toggle("open");
   }
 
-  function updateSummary() {
-    const selected = document.querySelectorAll(".seat.selected");
-    const seatNumbers = Array.from(selected).map(seat => seat.textContent);
+  // Close mobile menu when a link is clicked
+  document.querySelectorAll("#navList a").forEach(link => {
+    link.addEventListener("click", () => {
+      document.getElementById("navList").classList.remove("open");
+    });
+  });
 
-    const price = Number(showSelect.value);
-    const total = selected.length * price;
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener("click", function (e) {
+      const target = document.querySelector(this.getAttribute("href"));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  });
 
-    selectedSeatsText.textContent =
-      seatNumbers.length > 0 ? seatNumbers.join(", ") : "None";
+  // Contact form handling (client-side only)
+  const form = document.getElementById("contactForm");
+  const msg = document.getElementById("formMsg");
 
-    priceText.textContent = selected.length > 0 ? price : 0;
-    totalText.textContent = total;
-  }
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const name = form.name.value.trim();
+    const email = form.email.value.trim();
+    const message = form.message.value.trim();
 
-  showSelect.addEventListener("change", updateSummary);
-
-  function bookTickets() {
-    const selected = document.querySelectorAll(".seat.selected");
-
-    if (selected.length === 0) {
-      alert("Please select at least one seat.");
+    if (!name || !email || !message) {
+      msg.style.color = "#e63946";
+      msg.textContent = "Please fill in all required fields.";
       return;
     }
 
-    const seatNumbers = Array.from(selected)
-      .map(seat => seat.textContent)
-      .join(", ");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      msg.style.color = "#e63946";
+      msg.textContent = "Please enter a valid email address.";
+      return;
+    }
 
-    const total = selected.length * Number(showSelect.value);
-
-    document.getElementById("message").textContent =
-      `Booking confirmed! Seats: ${seatNumbers} | Total: ₹${total}`;
-  }
+    msg.style.color = "#0b6e4f";
+    msg.textContent = `Thank you, ${name}! Your message has been received.`;
+    form.reset();
+  });
 </script>
 
 </body>
